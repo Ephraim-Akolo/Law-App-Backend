@@ -1,6 +1,8 @@
 asgiref==3.7.2
+Brotli==1.1.0
 click==8.1.7
 colorama==0.4.6
+dj-database-url==2.1.0
 Django==3.2.24
 django-filter==23.5
 djangorestframework==3.14.0
@@ -9,8 +11,10 @@ h11==0.14.0
 importlib-metadata==6.7.0
 Markdown==3.4.4
 packaging==23.2
+python-dotenv==0.21.1
 pytz==2024.1
 sqlparse==0.4.4
 typing_extensions==4.7.1
 uvicorn==0.22.0
+whitenoise==6.5.0
 zipp==3.15.0

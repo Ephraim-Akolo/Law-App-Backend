@@ -29,14 +29,27 @@ SECRET_KEY = 'django-insecure-05*4^w603%e*c%_kr&2896urwu61oy%0_oy89tkib1x_7an+j(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['law-app-backend.onrender.com']
+ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
 
-CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com', 'http://localhost']
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 # CORS_ALLOWED_ORIGINS = [
 # ]
+
+
+REST_FRAMEWORK = { 
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', 
+    }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'LAW FIRM API',
+    'DESCRIPTION': 'An application for the law firm industry',
+    'VERSION': '0.0.1',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 
 # Application definition
@@ -48,6 +61,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [

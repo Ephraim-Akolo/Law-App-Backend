@@ -30,7 +30,9 @@ SECRET_KEY = 'django-insecure-05*4^w603%e*c%_kr&2896urwu61oy%0_oy89tkib1x_7an+j(
 DEBUG = True
 
 ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
 
+CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com', 'http://localhost']
 CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com', 'http://localhost']
 
 CORS_ORIGIN_ALLOW_ALL = True

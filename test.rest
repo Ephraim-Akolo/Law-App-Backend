@@ -1,0 +1,15 @@
+
+# # https://law-app-backend.onrender.com
+# PATCH    http://localhost:8000/api/v1/auth/forgot-password/
+# content-type: application/json
+
+# {
+#     "otp": "662013",
+#     "password": "aaa222333"
+    
+# }
+
+
+###
+
+GET     https://api.render.com/deploy/srv-cneuiv6g1b2c73d0cm0g?key=GuTR-t5iwG8

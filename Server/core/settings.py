@@ -17,7 +17,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / 'etc/secrets/.env', override=True)
+load_dotenv(BASE_DIR / '.env', override=True)
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,6 +28,8 @@ SECRET_KEY = 'django-insecure-05*4^w603%e*c%_kr&2896urwu61oy%0_oy89tkib1x_7an+j(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+AUTH_USER_MODEL = 'authentication.User'
 
 ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
 ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
@@ -66,6 +68,9 @@ INSTALLED_APPS = [
 
     #
     'drf_spectacular',
+
+    #
+    'authentication.apps.AuthenticationConfig',
 ]
 
 MIDDLEWARE = [

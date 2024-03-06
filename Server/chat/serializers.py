@@ -32,7 +32,7 @@ class GetLamaResponseSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = LamaPrompt
-        fields = ('user', 'prompt', 'response')
+        fields = ('user', 'prompt', 'response', 'model_id')
 
     def get_user(self, obj):
         return obj.user.email

@@ -34,7 +34,6 @@ AUTH_USER_MODEL = 'authentication.User'
 ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
 
 CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com', 'http://localhost']
-CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com', 'http://localhost']
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -49,8 +48,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '10/hour',
-        'user': '10/hour',
+        'anon': '20/hour',
+        'user': '20/hour',
     },
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

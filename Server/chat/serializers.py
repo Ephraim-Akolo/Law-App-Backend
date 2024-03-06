@@ -27,7 +27,7 @@ class GetChatGPTResponseSerializer(serializers.ModelSerializer):
 class GetLamaResponseSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     prompt = serializers.CharField()
-    model_id = serializers.IntegerField(default=1)
+    model_id = serializers.IntegerField(default=1, write_only=True)
     response = serializers.CharField(read_only=True)
 
     class Meta(object):

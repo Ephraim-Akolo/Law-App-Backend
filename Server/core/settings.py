@@ -32,7 +32,6 @@ DEBUG = True
 AUTH_USER_MODEL = 'authentication.User'
 
 ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
-ALLOWED_HOSTS = ['law-app-backend.onrender.com', 'localhost']
 
 CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com', 'http://localhost']
 CSRF_TRUSTED_ORIGINS = ['https://law-app-backend.onrender.com', 'http://localhost']
@@ -45,6 +44,17 @@ CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = { 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', 
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/hour',
+        'user': '10/hour',
+    },
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
     }
 
 SPECTACULAR_SETTINGS = {
@@ -68,9 +78,11 @@ INSTALLED_APPS = [
 
     #
     'drf_spectacular',
+    'rest_framework_simplejwt',
 
     #
     'authentication.apps.AuthenticationConfig',
+    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [

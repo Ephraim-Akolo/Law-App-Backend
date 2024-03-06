@@ -5,7 +5,14 @@ from authentication.models import User
 
 
 class ChatGPTPrompt(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    prompt = models.TextField()
+    response = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class LamaPrompt(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     prompt = models.TextField()
     response = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

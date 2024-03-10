@@ -27,4 +27,5 @@ urlpatterns = [
 
     path('api/v1/auth/', include('authentication.urls')),
     path('api/v1/chat/', include('chat.urls')),
+    path('api/v1/drive/', include('drive.urls')),
 ]

@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     #
     'authentication.apps.AuthenticationConfig',
     'chat.apps.ChatConfig',
+    'drive.apps.DriveConfig',
 ]
 
 MIDDLEWARE = [

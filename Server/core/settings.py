@@ -64,6 +64,8 @@ SPECTACULAR_SETTINGS = {
     # OTHER SETTINGS
 }
 
+MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Application definition
 
@@ -76,6 +78,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #
+    'cloudinary_storage',
+    'cloudinary',
     'drf_spectacular',
     'rest_framework_simplejwt',
 

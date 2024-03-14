@@ -13,7 +13,7 @@ class GetChatGPTResponseSerializer(serializers.ModelSerializer):
         model = ChatGPTPrompt
         fields = ('user', 'prompt', 'response')
 
-    def get_user(self, obj):
+    def get_user(self, obj)->serializers.EmailField:
         return obj.user.email
 
 
@@ -34,7 +34,7 @@ class GetLamaResponseSerializer(serializers.ModelSerializer):
         model = LamaPrompt
         fields = ('user', 'prompt', 'response', 'model_id')
 
-    def get_user(self, obj):
+    def get_user(self, obj) -> serializers.EmailField:
         return obj.user.email
 
 

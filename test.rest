@@ -14,3 +14,21 @@
 ###
 
 GET     https://api.render.com/deploy/srv-cneuiv6g1b2c73d0cm0g?key=GuTR-t5iwG8
+
+
+###
+
+POST   http://localhost:8000/drive/file/
+accept: multipart/form-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEwNzkzNDQ0LCJpYXQiOjE3MTA3ODk4NDQsImp0aSI6IjFiZDZkNGU0YmRkOTQwMjNhNTU4NzNmMDFiZTg0ZDkxIiwidXNlcl9pZCI6Mn0.kajP7wARFewR88Ffqz5LuYvfc_53JfEqKbLg1CU9qME
+
+--boundary
+Content-Disposition: form-data; name="add2folder"
+'helel'
+
+# --boundary
+# Content-Disposition: form-data; name="file"; filename="requirements.txt"
+# Content-Type: text/plain
+
+# @C:/Users/Cloud/Desktop/VSCode/Law-App-Backend/Server/requirements.txt
+# --boundary--

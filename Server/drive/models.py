@@ -11,9 +11,15 @@ class Folder(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     
 
+class Thumbnail(models.Model):
+    ext = models.CharField(max_length=10, unique=True)
+    image = models.ImageField(upload_to='thumbnails/', storage=MediaCloudinaryStorage())
+    created = models.DateTimeField(auto_now_add=True)
+
+
 class File(models.Model):
-    # name = models.CharField(max_length=50)
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, null=True)
-    thumbnail = models.ImageField(upload_to='thumbnails/', storage=MediaCloudinaryStorage())
+    thumbnail = models.ForeignKey(Thumbnail, on_delete=models.CASCADE, null=True)
+    # thumbnail = models.ImageField(upload_to='thumbnails/', storage=MediaCloudinaryStorage())
     file = models.FileField(upload_to='files/')
     created = models.DateTimeField(auto_now_add=True)

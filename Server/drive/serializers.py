@@ -61,7 +61,7 @@ class FileSerializer(serializers.ModelSerializer):
         if obj.folder:
             return obj.folder.user.email
         
-    def get_thumbnail(self, obj):
+    def get_thumbnail(self, obj)->serializers.ImageField:
         if obj.thumbnail:
             return obj.thumbnail.image.url
     

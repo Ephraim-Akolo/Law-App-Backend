@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions, mixins, exceptions
 from rest_framework.parsers import MultiPartParser
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from . import serializers
 from .models import File, Folder, Thumbnail
@@ -78,7 +79,7 @@ class ThumbnailView(generics.ListCreateAPIView):
 @extend_schema_view(
     get=extend_schema(
         parameters=[
-            OpenApiParameter(name='folder', description='Folder Name', type=str),
+            OpenApiParameter(name='folder', description='Folder name or `all` to get all files' , type=str),
         ]
     )
 )
@@ -120,16 +121,58 @@ class FileView(generics.ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
-# class FileView(generics.ListCreateAPIView):
-#     # serializer_class = serializers.GetLamaResponseSerializer
-#     permission_classes = (permissions.IsAuthenticated,)
-    
-#     def get_queryset(self):
-#         return File.objects.filter(folder__user=self.request.user).order_by('id')
 
-#     def post(self, request, *args, **kwargs):
-#         '''
-#         Get all files accessible to the user.
-#         '''
-#         return super().post(request, *args, **kwargs)
+class UpdateFileView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.UpdateFileSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return File.objects.filter(folder__user=self.request.user)
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        file_name = self.request.data.get('file_name', None)
+        if file_name is None:
+            file_name = self.request.GET.get('file_name', None)
+        try:
+            filter_kwargs = {'id': int(file_name.split(' ')[-1])}
+        except:
+            raise exceptions.ValidationError("Invalid file name")
+        try:
+            obj = queryset.get(**filter_kwargs)
+        except queryset.model.DoesNotExist:
+            raise exceptions.ValidationError("User has no such file!")
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='file_name', description='file name to get file' , type=str),
+        ]
+    )
+    def get(self, request, *args, **kwargs):
+        '''
+        Retrieve a file.
+        '''
+        return super().get(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        '''
+        Move a file to a folder.
+        '''
+        return super().put(request, *args, **kwargs)
+    
+    def patch(self, request, *args, **kwargs):
+        '''
+        Move a file to a folder.
+        '''
+        return self.update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        '''
+        Delete a file.
+        '''
+        return super().delete(request, *args, **kwargs)
 

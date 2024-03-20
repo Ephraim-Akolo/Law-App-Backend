@@ -6,7 +6,8 @@ urlpatterns = [
     path('folder/', views.FolderView.as_view()),
     path('folder/<str:name>/', views.FolderViewRD.as_view()),
     path('thumbnail/', views.ThumbnailView.as_view()),
-    path('file/', views.FileView.as_view()),
+    path('files/', views.FileView.as_view()),
+    path('files/file/', views.UpdateFileView.as_view()),
     # path('file/<str:name>/', views.FolderViewRD.as_view()),
 ]
 

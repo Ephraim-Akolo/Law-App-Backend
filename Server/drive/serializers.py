@@ -81,3 +81,44 @@ class FileSerializer(serializers.ModelSerializer):
             print("The folder name entered does not exist for user")
         instance = File.objects.create(folder=folder, file=file, thumbnail=thumbnail)
         return instance
+    
+
+class UpdateFileSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+    file_name = serializers.CharField(write_only=True)
+    new_folder = serializers.CharField(write_only=True)
+    folder = FoldersSerializer(read_only=True)
+    thumbnail = serializers.SerializerMethodField()
+    file = serializers.FileField(read_only=True)
+    created = serializers.DateTimeField(read_only=True)
+
+    class Meta(object):
+        model = File
+        fields = ('id', 'name', 'user', 'folder', 'new_folder', 'thumbnail', 'file', 'file_name', 'created')
+
+    def get_user(self, obj) -> serializers.EmailField:
+        if obj.folder:
+            return obj.folder.user.email
+        
+    def get_thumbnail(self, obj)->serializers.ImageField:
+        if obj.thumbnail:
+            return obj.thumbnail.image.url
+    
+    def get_name(self, obj) -> str:
+        return f'Case {"0"*(LENGTH_OF_CASE_ID-len(str(obj.id)))+str(obj.id)}'
+    
+
+    def update(self, instance:File, validated_data):
+        new_folder = validated_data.pop("new_folder")
+        try:
+            folder_id = int(new_folder.split(' ')[-1])
+        except:
+            raise serializers.ValidationError("Invalid folder name!")
+        try:
+            folder = Folder.objects.get(id=folder_id)
+        except Folder.DoesNotExist:
+            raise serializers.ValidationError("Folder does not exist!")
+        instance.folder = folder
+        instance.save()
+        return instance

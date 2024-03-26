@@ -17,8 +17,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
         email = validated_data.pop('email')
         password = validated_data.pop('password')
         user, created = User.objects.get_or_create(email=email)
-        if created:
-            user.username = uuid4().hex[:-6]
-            user.set_password(password)
-            user.save()
+        if not created:
+            raise serializers.ValidationError("User Already registered!")
+        user.username = uuid4().hex[:-6]
+        user.set_password(password)
+        user.save()
         return user

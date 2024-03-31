@@ -1,7 +1,9 @@
+import magic
 from rest_framework import serializers
 from django.db.models import Q
 from .models import File, Folder, Thumbnail
 from pathlib import Path
+from . import utils
 
 LENGTH_OF_CASE_ID = 4
 
@@ -51,11 +53,12 @@ class FileSerializer(serializers.ModelSerializer):
     folder = FoldersSerializer(read_only=True)
     thumbnail = serializers.SerializerMethodField()
     file = serializers.FileField()
+    file_content = serializers.SerializerMethodField()
     created = serializers.DateTimeField(read_only=True)
 
     class Meta(object):
         model = File
-        fields = ('id', 'name', 'user', 'folder', 'add2folder', 'thumbnail', 'file', 'created')
+        fields = ('id', 'name', 'user', 'folder', 'add2folder', 'thumbnail', 'file', 'file_content', 'created')
 
     def get_user(self, obj) -> serializers.EmailField:
         if obj.folder:
@@ -64,6 +67,22 @@ class FileSerializer(serializers.ModelSerializer):
     def get_thumbnail(self, obj)->serializers.ImageField:
         if obj.thumbnail:
             return obj.thumbnail.image.url
+        
+    def get_file_content(self, obj):
+        url = obj.file.url
+        # Use magic number detection to identify file type
+        file_content = obj.file.read()
+        mime_type = magic.from_buffer(file_content, mime=True)
+        
+        # Handle different file types
+        if mime_type == 'application/pdf':
+            return utils.read_pdf_from_url(url)
+        elif mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            return utils.read_docx_from_url(url)
+        elif mime_type.startswith('image/'):
+            return utils.read_text_from_image_url(url)
+        else:
+            return utils.read_text_from_url(url)
     
     def get_name(self, obj) -> str:
         return f'Case {"0"*(LENGTH_OF_CASE_ID-len(str(obj.id)))+str(obj.id)}'
@@ -91,11 +110,12 @@ class UpdateFileSerializer(serializers.ModelSerializer):
     folder = FoldersSerializer(read_only=True)
     thumbnail = serializers.SerializerMethodField()
     file = serializers.FileField(read_only=True)
+    file_content = serializers.SerializerMethodField()
     created = serializers.DateTimeField(read_only=True)
 
     class Meta(object):
         model = File
-        fields = ('id', 'name', 'user', 'folder', 'new_folder', 'thumbnail', 'file', 'file_name', 'created')
+        fields = ('id', 'name', 'user', 'folder', 'new_folder', 'thumbnail', 'file', 'file_content', 'file_name', 'created')
 
     def get_user(self, obj) -> serializers.EmailField:
         if obj.folder:
@@ -104,7 +124,24 @@ class UpdateFileSerializer(serializers.ModelSerializer):
     def get_thumbnail(self, obj)->serializers.ImageField:
         if obj.thumbnail:
             return obj.thumbnail.image.url
+        
+    def get_file_content(self, obj):
+        url = obj.file.url
+        # Use magic number detection to identify file type
+        file_content = obj.file.read()
+        mime_type = magic.from_buffer(file_content, mime=True)
+        
+        # Handle different file types
+        if mime_type == 'application/pdf':
+            return utils.read_pdf_from_url(url)
+        elif mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            return utils.read_docx_from_url(url)
+        elif mime_type.startswith('image/'):
+            return utils.read_text_from_image_url(url)
+        else:
+            return utils.read_text_from_url(url)
     
+
     def get_name(self, obj) -> str:
         return f'Case {"0"*(LENGTH_OF_CASE_ID-len(str(obj.id)))+str(obj.id)}'
     

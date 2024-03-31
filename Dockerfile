@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get install git build-essential gcc python3-dev musl-dev pkg-config -y
 RUN apt-get install libmagic1 tesseract-ocr libtesseract-dev -y
 
-COPY requirements.txt .
+COPY Server/requirements.txt .
 RUN pip install -r requirements.txt
 
 # The enviroment variable ensures that the python output is set straight

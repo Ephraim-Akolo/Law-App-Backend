@@ -21,8 +21,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN mkdir /Server
 WORKDIR /Server
 COPY ./Server /Server/
-RUN chmod +x ./build.sh
-RUN ./build.sh
+RUN python manage.py collectstatic --no-input
+RUN python manage.py migrate
 
 # Expose port for the Django development server
 EXPOSE 8000

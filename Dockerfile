@@ -18,7 +18,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN mkdir /Server
 WORKDIR /Server
-COPY . /Server/
+COPY ./Server /Server/
 RUN ./build.sh
 
 # Expose port for the Django development server

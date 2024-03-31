@@ -4,9 +4,11 @@ FROM python:3.11
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
+    libmagic1 \
+    tesseract-ocr \
+    libtesseract-dev \
     && rm -rf /var/lib/apt/lists/*
 # RUN apt-get install git build-essential gcc python3-dev musl-dev pkg-config -y
-RUN apt-get install libmagic1 tesseract-ocr libtesseract-dev -y
 
 COPY Server/requirements.txt .
 RUN pip install -r requirements.txt

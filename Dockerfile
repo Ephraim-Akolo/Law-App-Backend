@@ -22,8 +22,8 @@ RUN mkdir /Server
 WORKDIR /Server
 COPY ./Server /Server/
 
-RUN python manage.py migrate
-RUN python manage.py collectstatic --no-input
+# RUN python manage.py migrate
+# RUN python manage.py collectstatic --no-input
 
 
 # Expose port for the Django development server

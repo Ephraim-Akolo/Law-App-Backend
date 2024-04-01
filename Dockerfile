@@ -27,9 +27,9 @@ COPY ./Server /Server/
 
 
 # Expose port for the Django development server
-EXPOSE 8000
+EXPOSE 10000
 
 # Run Django server on container startup
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:10000"]
 
 

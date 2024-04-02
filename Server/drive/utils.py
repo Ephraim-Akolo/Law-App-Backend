@@ -27,6 +27,7 @@ def read_pdf_from_url(url):
             text = ""
             for page in pdf.pages:
                 text += page.extract_text()
+                break
         return text
     else:
         print("Failed to download PDF file from the URL")
@@ -46,6 +47,7 @@ def read_text_from_image_url(url):
     if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
         try:
+            raise Exception
             text = pytesseract.image_to_string(image)
         except:
             return "Reading text from images not currently supported!"

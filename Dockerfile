@@ -7,10 +7,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libmagic1 \
     tesseract-ocr \
     libtesseract-dev \
+    python-venv\
     && rm -rf /var/lib/apt/lists/*
 # RUN apt-get install git build-essential gcc python3-dev musl-dev pkg-config -y
 
+RUN mkdir /Server
+WORKDIR /Server
+
 COPY Server/requirements.txt .
+RUN python -m venv .venv
+RUN . ./.venv/bin/activate
 RUN pip install -r requirements.txt
 
 # The enviroment variable ensures that the python output is set straight
@@ -18,18 +24,15 @@ RUN pip install -r requirements.txt
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN mkdir /Server
-WORKDIR /Server
-COPY ./Server /Server/
-
+COPY ./Server .
 # RUN python manage.py migrate
 # RUN python manage.py collectstatic --no-input
 
 
 # Expose port for the Django development server
-EXPOSE 10000
+# EXPOSE 10000
 
 # Run Django server on container startup
-CMD ["python", "manage.py", "runserver", "0.0.0.0:10000"]
+ENTRYPOINT ["gunicorn", "core.wsgi"]
 
 

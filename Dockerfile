@@ -30,7 +30,7 @@ COPY ./Server .
 
 
 # Expose port for the Django development server
-EXPOSE 8000
+EXPOSE 10000
 
 # Run Django server on container startup
 ENTRYPOINT ["gunicorn", "core.wsgi"]

@@ -5,8 +5,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     libmagic1 \
-    tesseract-ocr \
-    libtesseract-dev \
+    # tesseract-ocr \
+    # libtesseract-dev \
     python3-venv\
     && rm -rf /var/lib/apt/lists/*
 # RUN apt-get install git build-essential gcc python3-dev musl-dev pkg-config -y

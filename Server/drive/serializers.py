@@ -53,7 +53,7 @@ class FileSerializer(serializers.ModelSerializer):
     folder = FoldersSerializer(read_only=True)
     thumbnail = serializers.SerializerMethodField()
     file = serializers.FileField()
-    file_content = serializers.SerializerMethodField()
+    file_content = serializers.CharField(read_only=True)
     created = serializers.DateTimeField(read_only=True)
 
     class Meta(object):
@@ -67,29 +67,14 @@ class FileSerializer(serializers.ModelSerializer):
     def get_thumbnail(self, obj)->serializers.ImageField:
         if obj.thumbnail:
             return obj.thumbnail.image.url
-        
-    def get_file_content(self, obj):
-        url = obj.file.url
-        # Use magic number detection to identify file type
-        file_content = obj.file.read()
-        mime_type = magic.from_buffer(file_content, mime=True)
-        
-        # Handle different file types
-        if mime_type == 'application/pdf':
-            return utils.read_pdf_from_url(url)
-        elif mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            return utils.read_docx_from_url(url)
-        elif mime_type.startswith('image/'):
-            return utils.read_text_from_image_url(url)
-        else:
-            return utils.read_text_from_url(url)
     
     def get_name(self, obj) -> str:
         return f'Case {"0"*(LENGTH_OF_CASE_ID-len(str(obj.id)))+str(obj.id)}'
 
     def create(self, validated_data):
         add2folder = validated_data.pop("add2folder")
-        file = validated_data.pop("file")
+        file = validated_data.pop("file") 
+        
         try:
             folder = Folder.objects.get(id=int(add2folder.split(' ')[-1]), user=self.context['request'].user) if add2folder and add2folder.isalnum() else None
             ext = Path(file.name).suffix.lower()
@@ -98,7 +83,19 @@ class FileSerializer(serializers.ModelSerializer):
                 thumbnail = Thumbnail.objects.filter(ext='.all').first()
         except Folder.DoesNotExist:
             print("The folder name entered does not exist for user")
-        instance = File.objects.create(folder=folder, file=file, thumbnail=thumbnail)
+        
+        file_content = ""
+        if file.content_type == 'application/pdf':
+            file_content = utils.read_pdf_from_file(file)
+        elif file.content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            file_content = utils.read_docx_from_file(file)
+            pass
+        elif file.content_type.startswith('image/'):
+            file_content = ""
+        else:
+            file_content = file.read().decode()
+        file.seek(0)
+        instance = File.objects.create(folder=folder, file=file, file_content=file_content[:1000], thumbnail=thumbnail)
         return instance
     
 
@@ -110,7 +107,7 @@ class UpdateFileSerializer(serializers.ModelSerializer):
     folder = FoldersSerializer(read_only=True)
     thumbnail = serializers.SerializerMethodField()
     file = serializers.FileField(read_only=True)
-    file_content = serializers.SerializerMethodField()
+    file_content = serializers.CharField(read_only=True)
     created = serializers.DateTimeField(read_only=True)
 
     class Meta(object):
@@ -124,23 +121,6 @@ class UpdateFileSerializer(serializers.ModelSerializer):
     def get_thumbnail(self, obj)->serializers.ImageField:
         if obj.thumbnail:
             return obj.thumbnail.image.url
-        
-    def get_file_content(self, obj):
-        url = obj.file.url
-        # Use magic number detection to identify file type
-        file_content = obj.file.read()
-        mime_type = magic.from_buffer(file_content, mime=True)
-        
-        # Handle different file types
-        if mime_type == 'application/pdf':
-            return utils.read_pdf_from_url(url)
-        elif mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            return utils.read_docx_from_url(url)
-        elif mime_type.startswith('image/'):
-            return utils.read_text_from_image_url(url)
-        else:
-            return utils.read_text_from_url(url)
-    
 
     def get_name(self, obj) -> str:
         return f'Case {"0"*(LENGTH_OF_CASE_ID-len(str(obj.id)))+str(obj.id)}'

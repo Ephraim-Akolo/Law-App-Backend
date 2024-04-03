@@ -30,7 +30,7 @@ class FolderView(generics.ListCreateAPIView):
         return super().post(request, *args, **kwargs)
     
 
-class FolderViewRD(generics.RetrieveDestroyAPIView):
+class FolderViewRetrieveDestroy(generics.RetrieveDestroyAPIView):
     serializer_class = serializers.FoldersSerializer
     permission_classes = (permissions.IsAuthenticated,)
 

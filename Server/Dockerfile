@@ -33,6 +33,7 @@ COPY ./Server .
 EXPOSE 10000
 
 # Run Django server on container startup
-ENTRYPOINT ["gunicorn", "core.wsgi"]
+ENTRYPOINT ["gunicorn", "-w", "1" "core.wsgi"]
+
 
 

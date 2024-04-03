@@ -76,13 +76,13 @@ class FileSerializer(serializers.ModelSerializer):
         file = validated_data.pop("file") 
         
         try:
-            folder = Folder.objects.get(id=int(add2folder.split(' ')[-1]), user=self.context['request'].user) if add2folder and add2folder.isalnum() else None
+            folder = Folder.objects.get(id=int(add2folder.split(' ')[-1]), user=self.context['request'].user) if add2folder and isinstance(add2folder, str) and len(add2folder.split(' ')) >  1 else None
             ext = Path(file.name).suffix.lower()
             thumbnail = Thumbnail.objects.filter(ext__iexact=ext).first()
             if thumbnail is None:
                 thumbnail = Thumbnail.objects.filter(ext='.all').first()
         except Folder.DoesNotExist:
-            print("The folder name entered does not exist for user")
+            print("The folder name entered does not exist for user".i)
         
         file_content = ""
         if file.content_type == 'application/pdf':

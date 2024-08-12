@@ -5,3 +5,4 @@ from . import models
 
 admin.site.register(models.Folder)
 admin.site.register(models.File)
+admin.site.register(models.Thumbnail)

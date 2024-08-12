@@ -20,7 +20,7 @@ class Thumbnail(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f'Thumbnail {self.image[-10:]}...{self.ext}'
+        return f'Thumbnail {self.image.name[-10:]}...{self.ext}'
 
 
 
